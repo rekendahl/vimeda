@@ -4,9 +4,9 @@
    " repository. EDA designers don't need a lot of the HTML/on-line languages
    " defined. I still kept a random assortment around of more *common*
    " languages in the EDA field
-   if !exists('g:spf13_bundle_groups')
-      let g:spf13_bundle_groups=[ 'numbers', 'general', 'neocomplcache', 'programming', 'ruby', 'python', 'javascript', 'html', 'misc', 'systemverilog', 'systemc']
-   endif
+   "if !exists('g:spf13_bundle_groups')
+      "let g:spf13_bundle_groups=[ 'general', 'neocomplcache', 'programming', 'ruby', 'python', 'javascript', 'html', 'misc', 'systemverilog', 'systemc']
+   "endif
 
    " SystemVerilog {
       if count(g:spf13_bundle_groups, 'systemverilog')
