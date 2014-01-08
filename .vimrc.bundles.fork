@@ -1,0 +1,23 @@
+" EDA Bundles {
+
+   " *Note* I have cut down on the number of languages includes in base
+   " repository. EDA designers don't need a lot of the HTML/on-line languages
+   " defined. I still kept a random assortment around of more *common*
+   " languages in the EDA field
+   if !exists('g:spf13_bundle_groups')
+      let g:spf13_bundle_groups=['general', 'neocomplcache', 'programming', 'ruby', 'python', 'javascript', 'html', 'misc', 'systemverilog', 'systemc']
+   endif
+
+   " SystemVerilog {
+      if count(g:spf13_bundle_groups, 'systemverilog')
+         Bundle 'verilog_systemverilog.vim'
+      endif
+   "}
+
+   " SystemC {
+      if count(g:spf13_bundle_groups, 'systemc')
+         Bundle 'systemc_syntax.tar.gz'
+      endif
+   "}
+
+"}
