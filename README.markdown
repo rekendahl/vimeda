@@ -9,12 +9,12 @@ It works with Vim, Gvim, and [MacVim] on Linux, Windows and Mac. It's easy to
 install (see below) yet VERY configurable. You can be up and running within a
 couple of minutes running the automatic installer. It supports all common
 Design and Verification languages including Verilog, SystemVerilog, VHDL,
-SystemC, C++ etc. 
+SystemC, C++ etc.
 
 I take little credit for this work! VIMEDA is a fork of the excellent
 [spf13-vim] distrobution with added packages for Electronic Design and
 Verification languages.
- 
+
 # Installation
 
 ## Linux, \*nix, Mac OSX Installation
