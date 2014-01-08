@@ -26,15 +26,18 @@ a prior version (before 3.0) this is also the recommended installation.
 
 *Requires Git 1.7+ and Vim 7.3+*
 
-```bash
-    curl http://bit.ly/vimeda -L > vimeda.sh && sh vimeda.sh
-```
-
 If you have a bash-compatible shell you can run the script directly:
 ```bash
 
-    sh <(curl http://bit.ly/vimeda -L)
+    sh <(curl http://bit.ly/vimeda-1_0 -L)
 ```
+
+Otherwise this will work:
+
+```bash
+    curl http://bit.ly/vimeda-1_0 -L > vimeda-1_0.sh && sh vimeda-1_0.sh
+```
+
 
 ## Installing on Windows
 
