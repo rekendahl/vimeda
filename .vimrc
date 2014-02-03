@@ -455,7 +455,7 @@
     " }
 
     " NerdTree {
-        map <C-e> :NERDTreeToggle<CR>:NERDTreeMirror<CR>
+        map <C-e> <plug>NERDTreeTabsToggle<CR>
         map <leader>e :NERDTreeFind<CR>
         nmap <leader>nt :NERDTreeFind<CR>
 
@@ -600,8 +600,10 @@
             endif
 
             " For snippet_complete marker.
-            if has('conceal')
-                set conceallevel=2 concealcursor=i
+            if !exists("g:spf13_no_conceal")
+                if has('conceal')
+                    set conceallevel=2 concealcursor=i
+                endif
             endif
 
             " Disable the neosnippet preview candidate window
