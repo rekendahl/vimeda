@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 ############################  SETUP PARAMETERS
 app_name='vimeda'
-git_uri='https://github.com/rekendahl/vimeda'
+[ -z "$git_uri" ] && git_uri='https://github.com/rekendahl/vimeda'
 git_branch='eda-1.0'
 debug_mode='0'
 fork_maintainer='1'
+[ -z "$VUNDLE_URI" ] && VUNDLE_URI="https://github.com/gmarik/vundle.git"
 
 ############################  BASIC SETUP TOOLS
 msg() {
@@ -24,7 +25,7 @@ error() {
 
 debug() {
     if [ "$debug_mode" -eq '1' ] && [ "$ret" -gt '1' ]; then
-      msg "An error occured in function \"${FUNCNAME[$i+1]}\" on line ${BASH_LINENO[$i+1]}, we're sorry for that."
+      msg "An error occurred in function \"${FUNCNAME[$i+1]}\" on line ${BASH_LINENO[$i+1]}, we're sorry for that."
     fi
 }
 
@@ -93,7 +94,7 @@ clone_repo() {
 
 clone_vundle() {
     if [ ! -e "$HOME/.vim/bundle/vundle" ]; then
-        git clone https://github.com/gmarik/vundle.git "$HOME/.vim/bundle/vundle"
+        git clone $VUNDLE_URI "$HOME/.vim/bundle/vundle"
     else
         upgrade_repo "vundle"   "Successfully updated vundle"
     fi
