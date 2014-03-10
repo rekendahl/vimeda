@@ -1,9 +1,9 @@
 @if not exist "%HOME%" @set HOME=%HOMEDRIVE%%HOMEPATH%
 @if not exist "%HOME%" @set HOME=%USERPROFILE%
 
-@set APP_DIR=%HOME%\.vimeda
+@set APP_DIR=%HOME%\.spf13-vim-3
 IF NOT EXIST "%APP_DIR%" (
-  call git clone --recursive -b eda-1.0 https://github.com/rekendahl/vimeda.git  "%APP_DIR%"
+  call git clone --recursive -b 3.0 https://github.com/spf13/spf13-vim.git "%APP_DIR%"
 ) ELSE (
 	@set ORIGINAL_DIR=%CD%
     echo updating spf13-vim
@@ -27,7 +27,11 @@ IF NOT EXIST "%APP_DIR%\.vim\bundle" (
 )
 
 IF NOT EXIST "%HOME%/.vim/bundle/vundle" (
-    call git clone https://github.com/gmarik/vundle.git "%HOME%/.vim/bundle/vundle"
+	call git clone https://github.com/gmarik/vundle.git "%HOME%/.vim/bundle/vundle"
+) ELSE (
+  call cd "%HOME%/.vim/bundle/vundle"
+  call git pull
+  call cd %HOME%
 )
 
 call vim -u "%APP_DIR%/.vimrc.bundles" +BundleInstall! +BundleClean +qall
