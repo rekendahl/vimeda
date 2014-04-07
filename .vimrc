@@ -216,7 +216,7 @@
     " .vimrc.before.local file:
     "   let g:spf13_keep_trailing_whitespace = 1
     autocmd FileType c,cpp,java,go,php,javascript,python,twig,xml,yml autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
-    autocmd FileType go autocmd BufWritePre <buffer> Fmt
+    "autocmd FileType go autocmd BufWritePre <buffer> Fmt
     autocmd BufNewFile,BufRead *.html.twig set filetype=html.twig
     autocmd FileType haskell setlocal expandtab shiftwidth=2 softtabstop=2
     " preceding line best in a plugin but here for now.
@@ -393,6 +393,9 @@
     map zl zL
     map zh zH
 
+    " Easier formatting
+    nnoremap <silent> <leader>q gwip
+
     " FIXME: Revert this f70be548
     " fullscreen mode for GVIM and Terminal, need 'wmctrl' in you PATH
     map <silent> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
@@ -400,6 +403,28 @@
 " }
 
 " Plugins {
+
+    " TextObj Sentence {
+        if count(g:spf13_bundle_groups, 'writing')
+            augroup textobj_sentence
+              autocmd!
+              autocmd FileType markdown call textobj#sentence#init()
+              autocmd FileType textile call textobj#sentence#init()
+              autocmd FileType text call textobj#sentence#init()
+            augroup END
+        endif
+    " }
+
+    " TextObj Quote {
+        if count(g:spf13_bundle_groups, 'writing')
+            augroup textobj_quote
+                autocmd!
+                autocmd FileType markdown call textobj#quote#init()
+                autocmd FileType textile call textobj#quote#init()
+                autocmd FileType text call textobj#quote#init({'educate': 0})
+            augroup END
+        endif
+    " }
 
     " PIV {
         let g:DisableAutoPHPFolding = 0
@@ -663,6 +688,8 @@
                     inoremap <expr> <C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
                     inoremap <expr> <C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
                 else
+                    " <C-k> Complete Snippet
+                    " <C-k> Jump to next snippet point
                     imap <silent><expr><C-k> neosnippet#expandable() ?
                                 \ "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ?
                                 \ "\<C-e>" : "\<Plug>(neosnippet_expand_or_jump)")
@@ -670,13 +697,28 @@
 
                     inoremap <expr><C-g> neocomplete#undo_completion()
                     inoremap <expr><C-l> neocomplete#complete_common_string()
-                    inoremap <expr><CR> neocomplete#complete_common_string()
+                    "inoremap <expr><CR> neocomplete#complete_common_string()
 
                     " <CR>: close popup
                     " <s-CR>: close popup and save indent.
                     inoremap <expr><s-CR> pumvisible() ? neocomplete#close_popup()"\<CR>" : "\<CR>"
-                    inoremap <expr><CR> pumvisible() ? neocomplete#close_popup() : "\<CR>"
+                    "inoremap <expr><CR> pumvisible() ? neocomplete#close_popup() : "\<CR>"
 
+                    function! CleverCr()
+                        if pumvisible()
+                            if neosnippet#expandable()
+                                let exp = "\<Plug>(neosnippet_expand)"
+                                return exp . neocomplete#close_popup()
+                            else
+                                return neocomplete#close_popup()
+                            endif
+                        else
+                            return "\<CR>"
+                        endif
+                    endfunction
+
+                    " <CR> close popup and save indent or expand snippet 
+                    imap <expr> <CR> CleverCr() 
                     " <C-h>, <BS>: close popup and delete backword char.
                     inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
                     inoremap <expr><C-y> neocomplete#close_popup()
@@ -684,6 +726,29 @@
                 " <TAB>: completion.
                 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
                 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
+
+                " Courtesy of Matteo Cavalleri
+
+                function! CleverTab()
+                    if pumvisible()
+                        return "\<C-n>"
+                    endif 
+                    let substr = strpart(getline('.'), 0, col('.') - 1)
+                    let substr = matchstr(substr, '[^ \t]*$')
+                    if strlen(substr) == 0
+                        " nothing to match on empty string
+                        return "\<Tab>"
+                    else
+                        " existing text matching
+                        if neosnippet#expandable_or_jumpable()
+                            return "\<Plug>(neosnippet_expand_or_jump)"
+                        else
+                            return neocomplete#start_manual_complete()
+                        endif
+                    endif
+                endfunction
+
+                imap <expr> <Tab> CleverTab()
             " }
 
             " Enable heavy omni completion.
@@ -744,12 +809,28 @@
 
                     inoremap <expr><C-g> neocomplcache#undo_completion()
                     inoremap <expr><C-l> neocomplcache#complete_common_string()
-                    inoremap <expr><CR> neocomplcache#complete_common_string()
+                    "inoremap <expr><CR> neocomplcache#complete_common_string()
+
+                    function! CleverCr()
+                        if pumvisible()
+                            if neosnippet#expandable()
+                                let exp = "\<Plug>(neosnippet_expand)"
+                                return exp . neocomplcache#close_popup()
+                            else
+                                return neocomplcache#close_popup()
+                            endif
+                        else
+                            return "\<CR>"
+                        endif
+                    endfunction
+
+                    " <CR> close popup and save indent or expand snippet 
+                    imap <expr> <CR> CleverCr()
 
                     " <CR>: close popup
                     " <s-CR>: close popup and save indent.
                     inoremap <expr><s-CR> pumvisible() ? neocomplcache#close_popup()"\<CR>" : "\<CR>"
-                    inoremap <expr><CR> pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+                    "inoremap <expr><CR> pumvisible() ? neocomplcache#close_popup() : "\<CR>"
 
                     " <C-h>, <BS>: close popup and delete backword char.
                     inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
@@ -811,6 +892,9 @@
                     set conceallevel=2 concealcursor=i
                 endif
             endif
+
+            " Enable neosnippets when using go
+            let g:go_snippet_engine = "neosnippet"
 
             " Disable the neosnippet preview candidate window
             " When enabled, there can be too much visual noise
