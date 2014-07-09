@@ -5,7 +5,7 @@
    " defined. I still kept a random assortment around of more *common*
    " languages in the EDA field
 
-   let g:spf13_bundle_groups=['general', 'neocomplcache', 'programming', 'ruby', 'python', 'misc', 'systemverilog', 'vera']
+   let g:spf13_bundle_groups=['general', 'youcompleteme', 'programming', 'ruby', 'python', 'misc', 'systemverilog', 'vera']
 
    " SystemVerilog {
       if count(g:spf13_bundle_groups, 'systemverilog')
